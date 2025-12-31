@@ -16,3 +16,11 @@ module.exports.GetBookings = (req, res) => {
     bookings: null,
   });
 };
+
+//show home details
+module.exports.GetHomeDetails = (req, res) => {
+  const homeId = req.params.id;
+  Home.findById(homeId).then((home) => {
+    res.render("user/homedetail", { title: "Home Details", home: home });
+  });
+};

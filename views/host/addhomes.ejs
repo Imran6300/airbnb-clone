@@ -3,187 +3,109 @@
   <%- include("../partials/head") %>
 
   <body class="bg-[#0B0F19] text-gray-100 min-h-screen flex flex-col">
-    <!-- NAVBAR -->
     <%- include("../partials/navbar") %>
 
-    <!-- PAGE HEADER -->
     <section class="pt-32 pb-12">
       <div class="max-w-7xl mx-auto px-6">
-        <h1 class="text-4xl font-bold mb-2">Add a new home</h1>
+        <h1 class="text-4xl font-bold mb-2">
+          <%= editing ? "Edit Home" : "Add a new home" %>
+        </h1>
         <p class="text-gray-400">
           Share your space with travelers around the world
         </p>
       </div>
     </section>
 
-    <!-- FORM -->
     <main class="flex-grow pb-24">
       <div class="max-w-4xl mx-auto px-6">
         <form
-          action="/host/add-home"
+          action="<%= editing ? '/host/edit-home' : '/host/add-home' %>"
           method="POST"
-          class="bg-[#111827] border border-white/10 rounded-2xl p-8 shadow-xl space-y-8"
+          class="bg-[#111827] border border-white/10 rounded-2xl p-8 shadow-xl space-y-6"
         >
+          <% if (editing) { %>
+          <input type="hidden" name="homeId" value="<%= home._id %>" />
+          <% } %>
+
           <!-- Title -->
-          <div>
-            <label class="block text-sm font-medium mb-2"> Home title </label>
-            <input
-              type="text"
-              name="title"
-              placeholder="Modern villa near the beach"
-              required
-              class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10 placeholder-gray-500 focus:outline-none focus:border-[#FF385C]"
-            />
-          </div>
+          <input
+            name="title"
+            value="<%= editing ? home.title : '' %>"
+            placeholder="Home title"
+            class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10"
+            required
+          />
 
           <!-- Location -->
-          <div>
-            <label class="block text-sm font-medium mb-2"> Location </label>
-            <input
-              type="text"
-              name="location"
-              placeholder="Goa, India"
-              required
-              class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10 placeholder-gray-500 focus:outline-none focus:border-[#FF385C]"
-            />
-          </div>
+          <input
+            name="location"
+            value="<%= editing ? home.location : '' %>"
+            placeholder="Location"
+            class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10"
+            required
+          />
 
-          <!-- Image URL -->
-          <div>
-            <label class="block text-sm font-medium mb-2"> Image URL </label>
-            <input
-              type="url"
-              name="imageUrl"
-              placeholder="https://example.com/image.jpg"
-              class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10 placeholder-gray-500 focus:outline-none focus:border-[#FF385C]"
-            />
-          </div>
+          <!-- Image -->
+          <input
+            name="imageUrl"
+            value="<%= editing ? home.imageUrl : '' %>"
+            placeholder="Image URL"
+            class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10"
+          />
 
           <!-- Description -->
-          <div>
-            <label class="block text-sm font-medium mb-2"> Description </label>
-            <textarea
-              name="description"
-              rows="4"
-              placeholder="Describe your home, amenities, and nearby attractions..."
+          <textarea
+            name="description"
+            rows="4"
+            required
+            class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10"
+          >
+<%= editing ? home.description : '' %></textarea
+          >
+
+          <!-- Price & Guests -->
+          <div class="grid grid-cols-2 gap-4">
+            <input
+              type="number"
+              name="price"
+              value="<%= editing ? home.price : '' %>"
+              placeholder="Price"
+              class="px-4 py-3 rounded-xl bg-transparent border border-white/10"
               required
-              class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10 placeholder-gray-500 focus:outline-none focus:border-[#FF385C]"
-            ></textarea>
-          </div>
+            />
 
-          <!-- Grid Inputs -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <!-- Price -->
-            <div>
-              <label class="block text-sm font-medium mb-2">
-                Price per night (₹)
-              </label>
-              <input
-                type="number"
-                name="price"
-                min="0"
-                required
-                class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10 focus:outline-none focus:border-[#FF385C]"
-              />
-            </div>
-
-            <!-- Guests -->
-            <div>
-              <label class="block text-sm font-medium mb-2"> Max guests </label>
-              <input
-                type="number"
-                name="guests"
-                min="1"
-                required
-                class="w-full px-4 py-3 rounded-xl bg-transparent border border-white/10 focus:outline-none focus:border-[#FF385C]"
-              />
-            </div>
+            <input
+              type="number"
+              name="guests"
+              value="<%= editing ? home.guests : '' %>"
+              placeholder="Guests"
+              class="px-4 py-3 rounded-xl bg-transparent border border-white/10"
+              required
+            />
           </div>
 
           <!-- Amenities -->
-          <div>
-            <label class="block text-sm font-medium mb-3"> Amenities </label>
-            <div
-              class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm text-gray-300"
-            >
-              <label class="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="amenities"
-                  value="wifi"
-                  class="accent-[#FF385C]"
-                />
-                Wi-Fi
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="amenities"
-                  value="parking"
-                  class="accent-[#FF385C]"
-                />
-                Parking
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="amenities"
-                  value="ac"
-                  class="accent-[#FF385C]"
-                />
-                AC
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="amenities"
-                  value="kitchen"
-                  class="accent-[#FF385C]"
-                />
-                Kitchen
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="amenities"
-                  value="tv"
-                  class="accent-[#FF385C]"
-                />
-                TV
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="amenities"
-                  value="pool"
-                  class="accent-[#FF385C]"
-                />
-                Pool
-              </label>
-            </div>
+          <div class="grid grid-cols-3 gap-3 text-sm">
+            <% ["wifi","parking","ac","kitchen","tv","pool"].forEach(a => { %>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" name="amenities" value="<%= a %>" <%=
+              editing && home.amenities.includes(a) ? "checked" : "" %>
+              class="accent-[#FF385C]" />
+              <span class="capitalize"><%= a %></span>
+            </label>
+            <% }) %>
           </div>
 
           <!-- Submit -->
-          <div class="flex justify-end gap-4">
-            <a
-              href="/host/homes"
-              class="px-6 py-3 rounded-full border border-white/10 text-gray-300 hover:border-[#FF385C] hover:text-[#FF385C] transition"
-            >
-              Cancel
-            </a>
-
-            <button
-              type="submit"
-              class="px-8 py-3 rounded-full bg-[#FF385C] text-white hover:bg-[#e0314f] transition"
-            >
-              Add Home
-            </button>
-          </div>
+          <button
+            class="w-full py-3 rounded-full bg-[#FF385C] text-white hover:bg-[#e0314f] transition"
+          >
+            <%= editing ? "Update Home" : "Add Home" %>
+          </button>
         </form>
       </div>
     </main>
 
-    <!-- FOOTER -->
     <%- include("../partials/footer") %>
   </body>
 </html>
