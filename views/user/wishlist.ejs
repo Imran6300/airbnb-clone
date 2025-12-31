@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../partials/head") %>
+
+  <body class="bg-[#0B0F19] text-gray-100 min-h-screen flex flex-col">
+    <!-- NAVBAR -->
+    <%- include("../partials/navbar") %>
+
+    <!-- PAGE HEADER -->
+    <section class="pt-32 pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <h1 class="text-4xl font-bold mb-2">My Wishlist</h1>
+        <p class="text-gray-400">Your favorite places, saved for later</p>
+      </div>
+    </section>
+
+    <main class="flex-grow pb-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <% if (HomeBody && HomeBody.length > 0) { %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <% HomeBody.forEach(home => { %>
+          <div
+            class="bg-[#111827] rounded-2xl border border-white/10 hover:border-[#FF385C]/40 transition shadow-lg hover:shadow-2xl"
+          >
+            <!-- Image -->
+            <img
+              src="<%= home.imageUrl || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511' %>"
+              class="h-56 w-full object-cover rounded-t-2xl"
+            />
+
+            <!-- Content -->
+            <div class="p-5">
+              <h3 class="font-semibold text-lg mb-1"><%= home.title %></h3>
+
+              <p class="text-gray-400 text-sm"><%= home.location %></p>
+
+              <p class="mt-2 font-semibold">₹<%= home.price %> / night</p>
+
+              <!-- Actions -->
+              <div class="mt-4 flex justify-between items-center">
+                <a
+                  href="/homes/<%= home._id %>"
+                  class="text-sm text-[#FF385C] hover:underline"
+                >
+                  View details
+                </a>
+
+                <form action="/wishlist/remove" method="POST">
+                  <input type="hidden" name="homeId" value="<%= home._id %>" />
+                  <button
+                    class="text-sm text-gray-400 hover:text-red-400 transition"
+                  >
+                    Remove
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+
+        <% } else { %>
+        <div class="text-center py-32">
+          <h2 class="text-3xl font-bold mb-4">Your wishlist is empty 💔</h2>
+
+          <p class="text-gray-400 mb-8">
+            Start exploring and save your favorite stays
+          </p>
+
+          <a
+            href="/"
+            class="inline-block px-8 py-3 rounded-full bg-[#FF385C] text-white hover:bg-[#e0314f] transition"
+          >
+            Explore homes
+          </a>
+        </div>
+        <% } %>
+      </div>
+    </main>
+
+    <%- include("../partials/footer") %>
+  </body>
+</html>

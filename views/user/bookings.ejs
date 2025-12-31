@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../partials/head") %>
+
+  <body class="bg-[#0B0F19] text-gray-100 min-h-screen flex flex-col">
+    <!-- NAVBAR -->
+    <%- include("../partials/navbar") %>
+
+    <!-- PAGE HEADER -->
+    <section class="pt-32 pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <h1 class="text-4xl font-bold mb-2">My Bookings</h1>
+        <p class="text-gray-400">Manage your upcoming and past stays</p>
+      </div>
+    </section>
+
+    <!-- BOOKINGS CONTENT -->
+    <main class="flex-grow pb-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- 🔁 If bookings exist -->
+        <% if (bookings && bookings.length > 0) { %>
+        <div class="space-y-8">
+          <% bookings.forEach(booking => { %>
+          <div
+            class="bg-[#111827] border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row gap-6 hover:border-[#FF385C]/40 transition shadow-lg"
+          >
+            <!-- Image -->
+            <img
+              src="<%= booking.imageUrl || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511' %>"
+              class="w-full md:w-64 h-44 object-cover rounded-xl"
+            />
+
+            <!-- Details -->
+            <div class="flex-1">
+              <h3 class="text-xl font-semibold mb-1"><%= booking.title %></h3>
+
+              <p class="text-gray-400 text-sm mb-3"><%= booking.location %></p>
+
+              <!-- Dates -->
+              <div class="flex flex-wrap gap-6 text-sm">
+                <div>
+                  <p class="text-gray-500">Check-in</p>
+                  <p><%= booking.checkIn %></p>
+                </div>
+
+                <div>
+                  <p class="text-gray-500">Check-out</p>
+                  <p><%= booking.checkOut %></p>
+                </div>
+
+                <div>
+                  <p class="text-gray-500">Guests</p>
+                  <p><%= booking.guests %></p>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <p class="mt-4 font-semibold">
+                Total: ₹<%= booking.totalPrice %>
+              </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex md:flex-col justify-between gap-4">
+              <a
+                href="/bookings/<%= booking._id %>"
+                class="px-5 py-2 rounded-full border border-white/10 text-sm text-gray-300 hover:border-[#FF385C] hover:text-[#FF385C] transition text-center"
+              >
+                View
+              </a>
+
+              <form action="/bookings/cancel" method="POST">
+                <input
+                  type="hidden"
+                  name="bookingId"
+                  value="<%= booking._id %>"
+                />
+                <button
+                  class="px-5 py-2 rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 transition text-sm"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+
+        <!-- 🌙 Empty Bookings State -->
+        <% } else { %>
+        <div class="text-center py-32">
+          <h2 class="text-3xl font-bold mb-4">No bookings yet 🧳</h2>
+
+          <p class="text-gray-400 mb-8">
+            Looks like you haven’t booked a stay yet
+          </p>
+
+          <a
+            href="/"
+            class="inline-block px-8 py-3 rounded-full bg-[#FF385C] text-white hover:bg-[#e0314f] transition"
+          >
+            Explore homes
+          </a>
+        </div>
+        <% } %>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include("../partials/footer") %>
+  </body>
+</html>
