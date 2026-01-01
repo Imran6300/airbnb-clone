@@ -7,6 +7,7 @@ const {
   PostAddHome,
   GetEditHome,
   PostEditHome,
+  DeleteHome,
 } = require("../controllers/host");
 
 // Host homes list
@@ -19,5 +20,6 @@ hostRouter.post("/add-home", PostAddHome);
 // Edit home
 hostRouter.get("/edit-home/:id", GetEditHome);
 hostRouter.post("/edit-home", PostEditHome);
+hostRouter.post("/host-home-list", DeleteHome);
 
 module.exports = hostRouter;

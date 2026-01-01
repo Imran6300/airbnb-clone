@@ -108,3 +108,16 @@ exports.PostEditHome = async (req, res) => {
     res.status(500).send("Failed to update home");
   }
 };
+
+exports.DeleteHome = (req, res) => {
+  const homeId = req.body.homeId;
+
+  Home.findByIdAndDelete(homeId)
+    .then(() => {
+      res.redirect("/host/host-home-list");
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Failed to delete home");
+    });
+};

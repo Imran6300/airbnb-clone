@@ -82,7 +82,8 @@
                 </a>
 
                 <!-- Favourite -->
-                <form action="/wishlist/<%= home._id %>" method="POST">
+                <form action="/wishlist" method="POST">
+                  <input type="hidden" name="homeId" value="<%= home._id %>" />
                   <button
                     class="text-sm px-3 py-1.5 rounded-full border border-white/30 text-white hover:border-[#FF385C] hover:text-[#FF385C] transition"
                   >
