@@ -1,43 +1,55 @@
 const express = require("express");
-//mongoose
 const mongoose = require("mongoose");
-const DB_Path =
-  "mongodb+srv://Root1234:Root1234@airbnb.q6sfnix.mongodb.net/airbnb?retryWrites=true&w=majority&appName=Airbnb";
+require("dotenv").config(); // ✅ load env variables
 
-//routes
+// routes
 const userRouter = require("./routes/userRoute");
 const hostRouter = require("./routes/hostRoute");
 const authRouter = require("./routes/authRoute");
-//controllers
+
+// controllers
 const { Get404 } = require("./controllers/errors");
 
 const app = express();
+
+// middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//view engine setup
+// view engine
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-//static files
+// static files
 app.use(express.static("public"));
 
-//routes middleware
+// routes
 app.use("/auth", authRouter);
 app.use("/", userRouter);
 app.use("/host", hostRouter);
 
+// 404
 app.use(Get404);
 
-const PORT = 3020;
+// env vars
+const PORT = process.env.PORT || 3020;
+const DB_PATH = process.env.DB_PATH;
+
+// safety check
+if (!DB_PATH) {
+  console.error("❌ DB_PATH is missing in .env");
+  process.exit(1);
+}
+
+// database connection
 mongoose
-  .connect(DB_Path)
+  .connect(DB_PATH)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log("✅ MongoDB Connected Successfully");
     app.listen(PORT, () => {
-      console.log(`Server is running on port http://localhost:${PORT}`);
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.log("Error connecting to MongoDB: ", err);
+    console.error("❌ MongoDB Connection Error:", err.message);
   });
