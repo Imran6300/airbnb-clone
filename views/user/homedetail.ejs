@@ -77,12 +77,14 @@
               <span><%= home.location %></span>
             </div>
           </div>
-
-          <button
-            class="w-full mt-6 py-3 rounded-full bg-[#FF385C] text-white hover:bg-[#e0314f] transition font-medium"
-          >
-            Book now
-          </button>
+          <form action="/bookings/add" method="POST">
+            <input type="hidden" name="homeId" value="<%= home._id %>" />
+            <button
+              class="w-full mt-6 py-3 rounded-full bg-[#FF385C] text-white"
+            >
+              Book Now
+            </button>
+          </form>
         </div>
       </div>
     </main>

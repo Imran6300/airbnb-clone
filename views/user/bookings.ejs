@@ -9,90 +9,97 @@
     <!-- PAGE HEADER -->
     <section class="pt-32 pb-16">
       <div class="max-w-7xl mx-auto px-6">
-        <h1 class="text-4xl font-bold mb-2">My Bookings</h1>
-        <p class="text-gray-400">Manage your upcoming and past stays</p>
+        <h1 class="text-4xl font-bold mb-2 tracking-tight">My Bookings</h1>
+        <p class="text-gray-400">
+          Manage your confirmed stays and upcoming trips
+        </p>
       </div>
     </section>
 
     <!-- BOOKINGS CONTENT -->
     <main class="flex-grow pb-24">
-      <div class="max-w-7xl mx-auto px-6">
-        <!-- 🔁 If bookings exist -->
-        <% if (bookings && bookings.length > 0) { %>
-        <div class="space-y-8">
-          <% bookings.forEach(booking => { %>
-          <div
-            class="bg-[#111827] border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row gap-6 hover:border-[#FF385C]/40 transition shadow-lg"
-          >
-            <!-- Image -->
-            <img
-              src="<%= booking.imageUrl || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511' %>"
-              class="w-full md:w-64 h-44 object-cover rounded-xl"
-            />
+      <div class="max-w-7xl mx-auto px-6 space-y-8">
+        <% if (bookings && bookings.length > 0) { %> <% bookings.forEach(b => {
+        %>
 
-            <!-- Details -->
-            <div class="flex-1">
-              <h3 class="text-xl font-semibold mb-1"><%= booking.title %></h3>
+        <!-- BOOKING CARD (HORIZONTAL) -->
+        <div
+          class="bg-[#111827] border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row gap-6 hover:border-[#FF385C]/40 hover:shadow-2xl transition-all duration-300"
+        >
+          <!-- IMAGE -->
+          <img
+            src="<%= b.homeId.imageUrl %>"
+            alt="<%= b.homeId.title %>"
+            class="w-full md:w-64 h-48 object-cover rounded-xl"
+          />
 
-              <p class="text-gray-400 text-sm mb-3"><%= booking.location %></p>
-
-              <!-- Dates -->
-              <div class="flex flex-wrap gap-6 text-sm">
+          <!-- DETAILS -->
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <!-- TITLE + STATUS -->
+              <div class="flex items-start justify-between gap-4">
                 <div>
-                  <p class="text-gray-500">Check-in</p>
-                  <p><%= booking.checkIn %></p>
+                  <h3 class="text-2xl font-semibold leading-tight">
+                    <%= b.homeId.title %>
+                  </h3>
+                  <p class="text-gray-400 text-sm mt-1">
+                    <%= b.homeId.location %>
+                  </p>
                 </div>
 
-                <div>
-                  <p class="text-gray-500">Check-out</p>
-                  <p><%= booking.checkOut %></p>
-                </div>
-
-                <div>
-                  <p class="text-gray-500">Guests</p>
-                  <p><%= booking.guests %></p>
-                </div>
+                <span
+                  class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20"
+                >
+                  Confirmed
+                </span>
               </div>
 
-              <!-- Price -->
-              <p class="mt-4 font-semibold">
-                Total: ₹<%= booking.totalPrice %>
-              </p>
+              <!-- INFO -->
+              <div class="flex gap-8 mt-5 text-sm">
+                <div>
+                  <p class="text-gray-500">Guests</p>
+                  <p class="font-medium text-gray-200">
+                    <%= b.homeId.guests %>
+                  </p>
+                </div>
+
+                <div>
+                  <p class="text-gray-500">Price</p>
+                  <p class="font-medium text-gray-200">
+                    ₹<%= b.homeId.price %> / night
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <!-- Actions -->
-            <div class="flex md:flex-col justify-between gap-4">
+            <!-- ACTIONS -->
+            <div class="flex gap-4 mt-6">
               <a
-                href="/bookings/<%= booking._id %>"
-                class="px-5 py-2 rounded-full border border-white/10 text-sm text-gray-300 hover:border-[#FF385C] hover:text-[#FF385C] transition text-center"
+                href="/homes/<%= b.homeId._id %>"
+                class="px-6 py-2.5 rounded-full border border-white/10 text-gray-300 hover:border-[#FF385C] hover:text-[#FF385C] transition"
               >
-                View
+                View Details
               </a>
 
               <form action="/bookings/cancel" method="POST">
-                <input
-                  type="hidden"
-                  name="bookingId"
-                  value="<%= booking._id %>"
-                />
+                <input type="hidden" name="bookingId" value="<%= b._id %>" />
                 <button
-                  class="px-5 py-2 rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 transition text-sm"
+                  class="px-6 py-2.5 rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
                 >
                   Cancel
                 </button>
               </form>
             </div>
           </div>
-          <% }) %>
         </div>
 
-        <!-- 🌙 Empty Bookings State -->
-        <% } else { %>
+        <% }) %> <% } else { %>
+
+        <!-- EMPTY STATE -->
         <div class="text-center py-32">
           <h2 class="text-3xl font-bold mb-4">No bookings yet 🧳</h2>
-
           <p class="text-gray-400 mb-8">
-            Looks like you haven’t booked a stay yet
+            Start exploring amazing stays and book your first trip
           </p>
 
           <a
@@ -102,6 +109,7 @@
             Explore homes
           </a>
         </div>
+
         <% } %>
       </div>
     </main>
